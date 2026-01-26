@@ -1,20 +1,21 @@
 // Spider-Man Portfolio Mock Data
 
 export const personalInfo = {
-  name: "Gaurav",
-  nickname: "Gaurav",
+  name: "Michael Parker",
+  nickname: "Mikey",
   title: "Full-Stack Developer",
-  tagline: "Crafting exceptional digital experiences through innovative software engineering and web development. Let's build something amazing together.",
-  email: "hello@gaurav.dev",
+  tagline: "With great code comes great responsibility",
+  description: "A passionate developer swinging through the digital landscape, crafting exceptional web experiences with precision and creativity.",
+  email: "mikey@webdev.com",
   phone: "+1 (555) 123-4567",
-  location: "Available Worldwide",
+  location: "New York City, NY",
   avatar: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=400&h=400&fit=crop&crop=face",
   resume: "#",
   socials: {
     github: "https://github.com",
     linkedin: "https://linkedin.com",
     twitter: "https://twitter.com",
-    instagram: "https://instagram.com"
+    dribbble: "https://dribbble.com"
   }
 };
 
@@ -168,7 +169,7 @@ export const testimonials = [
     name: "Sarah Johnson",
     role: "CEO, TechStart Inc.",
     avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
-    content: "Gaurav delivered an exceptional e-commerce platform that exceeded our expectations. His attention to detail and technical expertise are unmatched.",
+    content: "Mikey delivered an exceptional e-commerce platform that exceeded our expectations. His attention to detail and technical expertise are unmatched.",
     rating: 5
   },
   {
@@ -176,7 +177,7 @@ export const testimonials = [
     name: "David Chen",
     role: "Product Manager, InnovateCo",
     avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
-    content: "Working with Gaurav was a game-changer for our project. He brought creative solutions and delivered ahead of schedule.",
+    content: "Working with Mikey was a game-changer for our project. He brought creative solutions and delivered ahead of schedule.",
     rating: 5
   },
   {
@@ -184,7 +185,7 @@ export const testimonials = [
     name: "Emily Rodriguez",
     role: "Founder, DesignLab",
     avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
-    content: "The UI/UX work Gaurav did for our app transformed our user engagement. Highly recommend his services!",
+    content: "The UI/UX work Mikey did for our app transformed our user engagement. Highly recommend his services!",
     rating: 5
   },
   {
@@ -192,19 +193,22 @@ export const testimonials = [
     name: "Marcus Thompson",
     role: "CTO, DataFlow Systems",
     avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face",
-    content: "Gaurav's software engineering skills are top-notch. He built us a scalable solution that handles millions of requests.",
+    content: "Mikey's software engineering skills are top-notch. He built us a scalable solution that handles millions of requests.",
     rating: 5
   }
 ];
 
 export const skills = [
-  { name: "React.js", level: 95 },
-  { name: "Node.js", level: 90 },
+  { name: "React / Next.js", level: 95 },
+  { name: "Node.js / Express", level: 90 },
   { name: "TypeScript", level: 88 },
-  { name: "Python", level: 85 }
+  { name: "Python / FastAPI", level: 85 },
+  { name: "MongoDB / PostgreSQL", level: 87 },
+  { name: "UI/UX Design", level: 82 }
 ];
 
 export const navLinks = [
+  { label: "Home", href: "#home" },
   { label: "Services", href: "#services" },
   { label: "Portfolio", href: "#portfolio" },
   { label: "Products", href: "#products" },
