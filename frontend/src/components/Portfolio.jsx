@@ -1,20 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ExternalLink, Github, ArrowRight } from 'lucide-react';
-import { projects } from '../data/mock';
-
-const categories = ['All', 'Web Development', 'Software Engineering', 'UI/UX Design', 'Freelancing'];
+import { useBootstrap } from '../context/BootstrapContext';
+import { useInView } from '../hooks/useInView';
 
 const Portfolio = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const [hoveredProject, setHoveredProject] = useState(null);
+  const { data } = useBootstrap();
+  const projects = data?.projects ?? [];
+  const categories = useMemo(
+    () => ['All', ...new Set((projects || []).map((p) => p.category).filter(Boolean))],
+    [projects]
+  );
 
   const filteredProjects =
     activeCategory === 'All'
       ? projects
       : projects.filter((project) => project.category === activeCategory);
+  const [sectionRef, inView] = useInView();
 
   return (
-    <section id="portfolio" className="relative py-24 lg:py-32 bg-gradient-to-b from-black via-zinc-950 to-black overflow-hidden">
+    <section ref={sectionRef} id="portfolio" className="relative py-24 lg:py-32 bg-gradient-to-b from-black via-zinc-950 to-black overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-red-600/10 rounded-full blur-3xl" />
@@ -23,7 +29,7 @@ const Portfolio = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-12 lg:mb-16">
+        <div className={`text-center mb-12 lg:mb-16 ${inView ? 'animate-fade-in-up' : 'opacity-0'}`}>
           <span className="inline-block px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-full text-red-400 text-sm font-medium mb-4">
             My Work
           </span>
@@ -39,7 +45,7 @@ const Portfolio = () => {
         </div>
 
         {/* Filter Tabs */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
+        <div className={`flex flex-wrap justify-center gap-3 mb-12 ${inView ? 'animate-fade-in-up' : 'opacity-0'}`} style={inView ? { animationDelay: '150ms' } : undefined}>
           {categories.map((category) => (
             <button
               key={category}
@@ -60,10 +66,10 @@ const Portfolio = () => {
           {filteredProjects.map((project, index) => (
             <div
               key={project.id}
-              className="group relative bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm border border-white/10 hover:border-red-500/50 rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-red-500/10"
+              className={`group relative bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm border border-white/10 hover:border-red-500/50 rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-red-500/10 ${inView ? 'animate-fade-in-up' : 'opacity-0'}`}
               onMouseEnter={() => setHoveredProject(project.id)}
               onMouseLeave={() => setHoveredProject(null)}
-              style={{ animationDelay: `${index * 100}ms` }}
+              style={inView ? { animationDelay: `${300 + index * 80}ms` } : undefined}
             >
               {/* Image */}
               <div className="relative h-56 overflow-hidden">

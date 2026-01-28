@@ -1,14 +1,19 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Quote, Star } from 'lucide-react';
-import { testimonials } from '../data/mock';
+import { useBootstrap } from '../context/BootstrapContext';
+import { useInView } from '../hooks/useInView';
 
 const Testimonials = () => {
+  const { data } = useBootstrap();
+  const testimonials = data?.testimonials ?? [];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-  }, []);
+    if (testimonials.length > 0) {
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    }
+  }, [testimonials.length]);
 
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
@@ -25,8 +30,10 @@ const Testimonials = () => {
     return () => clearInterval(interval);
   }, [isAutoPlaying, nextSlide]);
 
+  const [sectionRef, inView] = useInView();
+
   return (
-    <section id="testimonials" className="relative py-24 lg:py-32 bg-gradient-to-b from-black via-zinc-950 to-black overflow-hidden">
+    <section ref={sectionRef} id="testimonials" className="relative py-24 lg:py-32 bg-gradient-to-b from-black via-zinc-950 to-black overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-red-600/10 rounded-full blur-3xl" />
@@ -34,7 +41,7 @@ const Testimonials = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <div className={`text-center mb-16 ${inView ? 'animate-fade-in-up' : 'opacity-0'}`}>
           <span className="inline-block px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-full text-red-400 text-sm font-medium mb-4">
             Testimonials
           </span>
@@ -50,7 +57,8 @@ const Testimonials = () => {
         </div>
 
         {/* Carousel */}
-        <div className="relative max-w-4xl mx-auto">
+        {testimonials.length > 0 ? (
+        <div className={`relative max-w-4xl mx-auto ${inView ? 'animate-fade-in-up' : 'opacity-0'}`} style={inView ? { animationDelay: '150ms' } : undefined}>
           {/* Main Card */}
           <div className="relative">
             <div className="relative p-8 lg:p-12 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm border border-white/10 rounded-3xl">
@@ -65,28 +73,28 @@ const Testimonials = () => {
               <div className="pt-6">
                 {/* Stars */}
                 <div className="flex gap-1 mb-6">
-                  {[...Array(testimonials[currentIndex].rating)].map((_, i) => (
+                  {[...Array(testimonials[currentIndex]?.rating || 5)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 text-yellow-500 fill-yellow-500" />
                   ))}
                 </div>
 
                 {/* Testimonial Text */}
                 <p className="text-xl lg:text-2xl text-gray-300 leading-relaxed mb-8 italic">
-                  "{testimonials[currentIndex].content}"
+                  "{testimonials[currentIndex]?.content}"
                 </p>
 
                 {/* Author */}
                 <div className="flex items-center gap-4">
                   <img
-                    src={testimonials[currentIndex].avatar}
-                    alt={testimonials[currentIndex].name}
+                    src={testimonials[currentIndex]?.avatar}
+                    alt={testimonials[currentIndex]?.name}
                     className="w-16 h-16 rounded-full border-2 border-red-500/50 object-cover"
                   />
                   <div>
                     <h4 className="text-lg font-semibold text-white">
-                      {testimonials[currentIndex].name}
+                      {testimonials[currentIndex]?.name}
                     </h4>
-                    <p className="text-red-400 text-sm">{testimonials[currentIndex].role}</p>
+                    <p className="text-red-400 text-sm">{testimonials[currentIndex]?.role}</p>
                   </div>
                 </div>
               </div>
@@ -134,33 +142,43 @@ const Testimonials = () => {
             </button>
           </div>
         </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-gray-400">Loading testimonials...</p>
+          </div>
+        )}
 
         {/* All Testimonials Preview */}
-        <div className="mt-16 grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {testimonials.map((testimonial, index) => (
-            <button
-              key={testimonial.id}
-              onClick={() => goToSlide(index)}
-              className={`p-4 text-left rounded-2xl border transition-all duration-300 ${
-                currentIndex === index
-                  ? 'bg-red-500/10 border-red-500/50'
-                  : 'bg-white/5 border-white/10 hover:bg-white/10'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <img
-                  src={testimonial.avatar}
-                  alt={testimonial.name}
-                  className="w-10 h-10 rounded-full object-cover"
-                />
-                <div>
-                  <h5 className="text-sm font-medium text-white">{testimonial.name}</h5>
-                  <p className="text-xs text-gray-500">{testimonial.role}</p>
+        {testimonials.length > 0 && (
+          <div className="mt-16 grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {testimonials.map((testimonial, index) => (
+              <button
+                key={testimonial.id || index}
+                onClick={() => goToSlide(index)}
+                className={`p-4 text-left rounded-2xl border transition-all duration-300 ${
+                  inView ? 'animate-fade-in-up' : 'opacity-0'
+                } ${
+                  currentIndex === index
+                    ? 'bg-red-500/10 border-red-500/50'
+                    : 'bg-white/5 border-white/10 hover:bg-white/10'
+                }`}
+                style={inView ? { animationDelay: `${350 + index * 60}ms` } : undefined}
+              >
+                <div className="flex items-center gap-3">
+                  <img
+                    src={testimonial.avatar}
+                    alt={testimonial.name}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  <div>
+                    <h5 className="text-sm font-medium text-white">{testimonial.name}</h5>
+                    <p className="text-xs text-gray-500">{testimonial.role}</p>
+                  </div>
                 </div>
-              </div>
-            </button>
-          ))}
-        </div>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

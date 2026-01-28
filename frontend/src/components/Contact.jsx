@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, CheckCircle, Loader2 } from 'lucide-react';
-import { personalInfo, skills } from '../data/mock';
+import { sendContactMessage } from '../services/api';
+import { useBootstrap } from '../context/BootstrapContext';
+import { useInView } from '../hooks/useInView';
 
 const Contact = () => {
+  const { data } = useBootstrap();
+  const personalInfo = data?.personalInfo ?? null;
+  const skills = data?.skills ?? [];
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     subject: '',
     message: '',
   });
-  const [status, setStatus] = useState('idle'); // idle, loading, success, error
+  const [status, setStatus] = useState('idle');
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
@@ -31,11 +36,15 @@ const Contact = () => {
     if (!validateForm()) return;
 
     setStatus('loading');
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setStatus('success');
-    setFormData({ name: '', email: '', subject: '', message: '' });
-    setTimeout(() => setStatus('idle'), 3000);
+    try {
+      await sendContactMessage(formData);
+      setStatus('success');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      setTimeout(() => setStatus('idle'), 3000);
+    } catch (error) {
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 3000);
+    }
   };
 
   const handleChange = (e) => {
@@ -56,7 +65,7 @@ const Contact = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 opacity-0 animate-fade-in-up">
           <span className="inline-block px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-full text-red-400 text-sm font-medium mb-4">
             Get In Touch
           </span>
@@ -73,50 +82,52 @@ const Contact = () => {
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Contact Info & Skills */}
-          <div>
+          <div className="opacity-0 animate-fade-in-up" style={{ animationDelay: '150ms' }}>
             {/* Contact Cards */}
-            <div className="space-y-4 mb-10">
-              <div className="group p-5 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm border border-white/10 hover:border-red-500/50 rounded-2xl transition-all duration-300 flex items-center gap-4">
-                <div className="p-3 bg-red-600/20 rounded-xl group-hover:bg-red-600 transition-colors">
-                  <Mail className="w-6 h-6 text-red-400 group-hover:text-white" />
+            {personalInfo && (
+              <div className="space-y-4 mb-10">
+                <div className="group p-5 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm border border-white/10 hover:border-red-500/50 rounded-2xl transition-all duration-300 flex items-center gap-4">
+                  <div className="p-3 bg-red-600/20 rounded-xl group-hover:bg-red-600 transition-colors">
+                    <Mail className="w-6 h-6 text-red-400 group-hover:text-white" />
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Email</p>
+                    <a href={`mailto:${personalInfo.email}`} className="text-white hover:text-red-400 transition-colors">
+                      {personalInfo.email}
+                    </a>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-gray-500 text-sm">Email</p>
-                  <a href={`mailto:${personalInfo.email}`} className="text-white hover:text-red-400 transition-colors">
-                    {personalInfo.email}
-                  </a>
-                </div>
-              </div>
 
-              <div className="group p-5 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm border border-white/10 hover:border-red-500/50 rounded-2xl transition-all duration-300 flex items-center gap-4">
-                <div className="p-3 bg-red-600/20 rounded-xl group-hover:bg-red-600 transition-colors">
-                  <Phone className="w-6 h-6 text-red-400 group-hover:text-white" />
+                <div className="group p-5 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm border border-white/10 hover:border-red-500/50 rounded-2xl transition-all duration-300 flex items-center gap-4">
+                  <div className="p-3 bg-red-600/20 rounded-xl group-hover:bg-red-600 transition-colors">
+                    <Phone className="w-6 h-6 text-red-400 group-hover:text-white" />
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Phone</p>
+                    <a href={`tel:${personalInfo.phone}`} className="text-white hover:text-red-400 transition-colors">
+                      {personalInfo.phone}
+                    </a>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-gray-500 text-sm">Phone</p>
-                  <a href={`tel:${personalInfo.phone}`} className="text-white hover:text-red-400 transition-colors">
-                    {personalInfo.phone}
-                  </a>
-                </div>
-              </div>
 
-              <div className="group p-5 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm border border-white/10 hover:border-red-500/50 rounded-2xl transition-all duration-300 flex items-center gap-4">
-                <div className="p-3 bg-red-600/20 rounded-xl group-hover:bg-red-600 transition-colors">
-                  <MapPin className="w-6 h-6 text-red-400 group-hover:text-white" />
-                </div>
-                <div>
-                  <p className="text-gray-500 text-sm">Location</p>
-                  <p className="text-white">{personalInfo.location}</p>
+                <div className="group p-5 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm border border-white/10 hover:border-red-500/50 rounded-2xl transition-all duration-300 flex items-center gap-4">
+                  <div className="p-3 bg-red-600/20 rounded-xl group-hover:bg-red-600 transition-colors">
+                    <MapPin className="w-6 h-6 text-red-400 group-hover:text-white" />
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">Location</p>
+                    <p className="text-white">{personalInfo.location}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Skills */}
             <div>
               <h3 className="text-xl font-semibold text-white mb-6">My Skills</h3>
               <div className="space-y-5">
                 {skills.map((skill, index) => (
-                  <div key={skill.name} style={{ animationDelay: `${index * 100}ms` }}>
+                  <div key={skill.id || skill.name || index} style={{ animationDelay: `${index * 100}ms` }}>
                     <div className="flex justify-between mb-2">
                       <span className="text-gray-300 text-sm font-medium">{skill.name}</span>
                       <span className="text-red-400 text-sm font-semibold">{skill.level}%</span>
@@ -134,15 +145,23 @@ const Contact = () => {
           </div>
 
           {/* Contact Form */}
-          <div className="relative">
+          <div className="relative opacity-0 animate-fade-in-up" style={{ animationDelay: '280ms' }}>
             <div className="p-8 lg:p-10 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm border border-white/10 rounded-3xl">
-              {status === 'success' ? (
+                  {status === 'success' ? (
                 <div className="h-full flex flex-col items-center justify-center py-12">
                   <div className="w-20 h-20 bg-green-600/20 rounded-full flex items-center justify-center mb-6">
                     <CheckCircle className="w-10 h-10 text-green-500" />
                   </div>
                   <h3 className="text-2xl font-semibold text-white mb-2">Message Sent!</h3>
                   <p className="text-gray-400 text-center">Thanks for reaching out. I'll get back to you soon.</p>
+                </div>
+              ) : status === 'error' ? (
+                <div className="h-full flex flex-col items-center justify-center py-12">
+                  <div className="w-20 h-20 bg-red-600/20 rounded-full flex items-center justify-center mb-6">
+                    <p className="text-4xl text-red-500">!</p>
+                  </div>
+                  <h3 className="text-2xl font-semibold text-white mb-2">Error Sending Message</h3>
+                  <p className="text-gray-400 text-center">Please try again later.</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">

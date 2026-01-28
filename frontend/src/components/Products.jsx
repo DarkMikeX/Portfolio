@@ -1,16 +1,84 @@
 import React, { useState } from 'react';
-import { ShoppingCart, Star, Download, Check } from 'lucide-react';
-import { products } from '../data/mock';
+import { ShoppingCart, Star, Download, Check, CreditCard, Wallet } from 'lucide-react';
+import { createCart, createCheckoutSession } from '../services/api';
+import { useBootstrap } from '../context/BootstrapContext';
+import { useInView } from '../hooks/useInView';
 
 const Products = () => {
+  const { data } = useBootstrap();
+  const products = data?.products ?? [];
   const [cart, setCart] = useState([]);
   const [addedToCart, setAddedToCart] = useState(null);
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('razorpay');
 
-  const addToCart = (product) => {
+  const addToCart = async (product) => {
     if (!cart.find((item) => item.id === product.id)) {
-      setCart([...cart, product]);
-      setAddedToCart(product.id);
-      setTimeout(() => setAddedToCart(null), 2000);
+      try {
+        await createCart({ productId: product.id, quantity: 1 });
+        setCart([...cart, product]);
+        setAddedToCart(product.id);
+        setTimeout(() => setAddedToCart(null), 2000);
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+      }
+    }
+  };
+
+  const handleCheckout = async () => {
+    if (cart.length === 0) return;
+    setShowPaymentModal(true);
+  };
+
+  const proceedToPayment = async () => {
+    if (cart.length === 0) return;
+    
+    setIsCheckoutLoading(true);
+    try {
+      const items = cart.map(item => ({
+        productId: item.id,
+        name: item.title,
+        price: item.price,
+        quantity: 1
+      }));
+      
+      const session = await createCheckoutSession({ 
+        items,
+        paymentMethod: selectedPaymentMethod
+      });
+      
+      if (selectedPaymentMethod === 'razorpay' && session.sessionId && session.razorpayKeyId && session.amount != null) {
+        sessionStorage.setItem('checkoutSession', JSON.stringify({
+          paymentMethod: 'razorpay',
+          sessionId: session.sessionId,
+          amount: session.amount,
+          currency: session.currency || 'INR',
+          razorpayKeyId: session.razorpayKeyId,
+          items: items,
+          url: session.url,
+        }));
+        setShowPaymentModal(false);
+        window.location.hash = '#checkout';
+      } else if (session.url && (selectedPaymentMethod === 'stripe' || selectedPaymentMethod === 'paypal')) {
+        window.location.href = session.url;
+      } else if (session.url) {
+        window.location.href = session.url;
+      }
+    } catch (error) {
+      console.error('Error creating checkout session:', error);
+      const errorMessage = error.response?.data?.detail || error.message || 'Unknown error';
+      
+      if (errorMessage.includes('Indian regulations') || errorMessage.includes('India')) {
+        alert('Stripe is not available for Indian individuals. Please use Razorpay or PayPal instead.');
+        setSelectedPaymentMethod('razorpay');
+        setShowPaymentModal(true);
+      } else {
+        alert(`Error processing checkout: ${errorMessage}`);
+      }
+    } finally {
+      setIsCheckoutLoading(false);
+      setShowPaymentModal(false);
     }
   };
 
@@ -18,8 +86,10 @@ const Products = () => {
     return Math.round(((originalPrice - price) / originalPrice) * 100);
   };
 
+  const [sectionRef, inView] = useInView();
+
   return (
-    <section id="products" className="relative py-24 lg:py-32 bg-black overflow-hidden">
+    <section ref={sectionRef} id="products" className="relative py-24 lg:py-32 bg-black overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-3xl" />
@@ -28,7 +98,7 @@ const Products = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <div className={`text-center mb-16 ${inView ? 'animate-fade-in-up' : 'opacity-0'}`}>
           <span className="inline-block px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-full text-red-400 text-sm font-medium mb-4">
             Digital Shop
           </span>
@@ -56,9 +126,14 @@ const Products = () => {
             </div>
             <div className="flex items-center gap-4">
               <span className="text-red-400 font-bold text-lg">
-                ${cart.reduce((sum, item) => sum + item.price, 0)}
+                ${cart.reduce((sum, item) => sum + item.price, 0).toFixed(2)}
               </span>
-              <button className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-full transition-colors">
+              <button 
+                onClick={handleCheckout}
+                disabled={isCheckoutLoading}
+                className="px-6 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-600/50 text-white font-semibold rounded-full transition-colors flex items-center gap-2"
+              >
+                <CreditCard className="w-4 h-4" />
                 Checkout
               </button>
             </div>
@@ -70,8 +145,8 @@ const Products = () => {
           {products.map((product, index) => (
             <div
               key={product.id}
-              className="group relative bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm border border-white/10 hover:border-red-500/50 rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-red-500/10"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className={`group relative bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm border border-white/10 hover:border-red-500/50 rounded-3xl overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-red-500/10 ${inView ? 'animate-fade-in-up' : 'opacity-0'}`}
+              style={inView ? { animationDelay: `${200 + index * 80}ms` } : undefined}
             >
               {/* Discount Badge */}
               <div className="absolute top-4 left-4 z-10">
@@ -158,6 +233,112 @@ const Products = () => {
           ))}
         </div>
       </div>
+
+      {/* Payment Method Selection Modal */}
+      {showPaymentModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-zinc-900 border border-white/10 rounded-3xl p-8 max-w-md w-full">
+            <h3 className="text-2xl font-bold text-white mb-6">Select Payment Method</h3>
+            
+            <div className="space-y-3 mb-6">
+              <button
+                onClick={() => setSelectedPaymentMethod('razorpay')}
+                className={`w-full p-4 rounded-xl border-2 transition-all ${
+                  selectedPaymentMethod === 'razorpay'
+                    ? 'border-red-500 bg-red-500/10'
+                    : 'border-white/10 hover:border-white/20'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                    selectedPaymentMethod === 'razorpay' ? 'border-red-500' : 'border-white/30'
+                  }`}>
+                    {selectedPaymentMethod === 'razorpay' && (
+                      <div className="w-3 h-3 bg-red-500 rounded-full" />
+                    )}
+                  </div>
+                  <Wallet className="w-6 h-6 text-white" />
+                  <div className="text-left flex-1">
+                    <div className="text-white font-semibold">Razorpay</div>
+                    <div className="text-gray-400 text-sm">UPI, Cards & More (Recommended for India)</div>
+                  </div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => setSelectedPaymentMethod('paypal')}
+                className={`w-full p-4 rounded-xl border-2 transition-all ${
+                  selectedPaymentMethod === 'paypal'
+                    ? 'border-red-500 bg-red-500/10'
+                    : 'border-white/10 hover:border-white/20'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                    selectedPaymentMethod === 'paypal' ? 'border-red-500' : 'border-white/30'
+                  }`}>
+                    {selectedPaymentMethod === 'paypal' && (
+                      <div className="w-3 h-3 bg-red-500 rounded-full" />
+                    )}
+                  </div>
+                  <Wallet className="w-6 h-6 text-white" />
+                  <div className="text-left flex-1">
+                    <div className="text-white font-semibold">PayPal</div>
+                    <div className="text-gray-400 text-sm">Pay with PayPal account</div>
+                  </div>
+                </div>
+              </button>
+
+              <button
+                onClick={() => setSelectedPaymentMethod('stripe')}
+                className={`w-full p-4 rounded-xl border-2 transition-all ${
+                  selectedPaymentMethod === 'stripe'
+                    ? 'border-red-500 bg-red-500/10'
+                    : 'border-white/10 hover:border-white/20'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                    selectedPaymentMethod === 'stripe' ? 'border-red-500' : 'border-white/30'
+                  }`}>
+                    {selectedPaymentMethod === 'stripe' && (
+                      <div className="w-3 h-3 bg-red-500 rounded-full" />
+                    )}
+                  </div>
+                  <CreditCard className="w-6 h-6 text-white" />
+                  <div className="text-left flex-1">
+                    <div className="text-white font-semibold">Credit/Debit Card</div>
+                    <div className="text-gray-400 text-sm">Stripe (Not available for Indian individuals)</div>
+                  </div>
+                </div>
+              </button>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowPaymentModal(false)}
+                className="flex-1 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold rounded-full transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={proceedToPayment}
+                disabled={isCheckoutLoading}
+                className="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 disabled:bg-red-600/50 text-white font-semibold rounded-full transition-colors flex items-center justify-center gap-2"
+              >
+                {isCheckoutLoading ? (
+                  <>Processing...</>
+                ) : (
+                  <>
+                    <CreditCard className="w-4 h-4" />
+                    Proceed to Payment
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

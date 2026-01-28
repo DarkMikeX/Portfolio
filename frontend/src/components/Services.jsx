@@ -1,6 +1,7 @@
 import React from 'react';
 import { Globe, Code2, Palette, Briefcase, ArrowUpRight } from 'lucide-react';
-import { services } from '../data/mock';
+import { useBootstrap } from '../context/BootstrapContext';
+import { useInView } from '../hooks/useInView';
 
 const iconMap = {
   Globe: Globe,
@@ -10,8 +11,12 @@ const iconMap = {
 };
 
 const Services = () => {
+  const { data } = useBootstrap();
+  const services = data?.services ?? [];
+  const [sectionRef, inView] = useInView();
+
   return (
-    <section id="services" className="relative py-24 lg:py-32 bg-black overflow-hidden">
+    <section ref={sectionRef} id="services" className="relative py-24 lg:py-32 bg-black overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-red-600/10 rounded-full blur-3xl" />
@@ -26,7 +31,7 @@ const Services = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16 lg:mb-20">
+        <div className={`text-center mb-16 lg:mb-20 ${inView ? 'animate-fade-in-up' : 'opacity-0'}`}>
           <span className="inline-block px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-full text-red-400 text-sm font-medium mb-4">
             What I Do
           </span>
@@ -48,8 +53,8 @@ const Services = () => {
             return (
               <div
                 key={service.id}
-                className="group relative p-8 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm border border-white/10 hover:border-red-500/50 rounded-3xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-red-500/10"
-                style={{ animationDelay: `${index * 100}ms` }}
+                className={`group relative p-8 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm border border-white/10 hover:border-red-500/50 rounded-3xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-red-500/10 ${inView ? 'animate-fade-in-up' : 'opacity-0'}`}
+                style={inView ? { animationDelay: `${200 + index * 80}ms` } : undefined}
               >
                 {/* Glow Effect */}
                 <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 via-red-600/0 to-red-600/0 group-hover:from-red-600/5 group-hover:via-red-600/10 group-hover:to-transparent rounded-3xl transition-all duration-500" />
