@@ -237,15 +237,15 @@ async def get_personal_info():
         if not info:
             # Return default if not found
             default_info = PersonalInfo(
-                name="Michael Parker",
+                name="Mikey",
                 nickname="Mikey",
                 title="Full-Stack Developer",
                 tagline="With great code comes great responsibility",
                 description="A passionate developer swinging through the digital landscape, crafting exceptional web experiences with precision and creativity.",
-                email="mikey@webdev.com",
+                email="mike@urmikexd.me",
                 phone="+1 (555) 123-4567",
                 location="New York City, NY",
-                avatar="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=400&h=400&fit=crop&crop=face",
+                avatar="/hero-avatar.png",
                 resume="#",
                 socials=Socials(
                     github="https://github.com",
@@ -268,7 +268,7 @@ async def get_personal_info():
             email="mikey@webdev.com",
             phone="+1 (555) 123-4567",
             location="New York City, NY",
-            avatar="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=400&h=400&fit=crop&crop=face",
+            avatar="/hero-avatar.png",
             resume="#",
             socials=Socials(
                 github="https://github.com",
@@ -285,12 +285,12 @@ async def update_personal_info(update: PersonalInfoUpdate):
         if not existing:
             # Create new if doesn't exist
             new_info = PersonalInfo(
-                name=update.name or "Michael Parker",
+                name=update.name or "Mikey",
                 nickname=update.nickname or "Mikey",
                 title=update.title or "Full-Stack Developer",
                 tagline=update.tagline or "With great code comes great responsibility",
                 description=update.description or "A passionate developer...",
-                email=update.email or "mikey@webdev.com",
+                email=update.email or "mike@urmikexd.me",
                 phone=update.phone or "+1 (555) 123-4567",
                 location=update.location or "New York City, NY",
                 avatar=update.avatar or "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=400&h=400&fit=crop&crop=face",

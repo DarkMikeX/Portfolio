@@ -242,6 +242,20 @@ curl http://127.0.0.1:8000/api/projects
 - TailwindCSS - Styling
 - Lucide React - Icons
 
+## 🚀 Deployment & Hosting
+
+See **[HOSTING.md](docs/HOSTING.md)** for detailed deployment instructions.
+
+**Quick Start Options:**
+- **Railway** (Recommended): All-in-one hosting for frontend + backend
+- **Vercel + Render**: Free hosting option (frontend on Vercel, backend on Render)
+- **Netlify + Fly.io**: Alternative free hosting with global CDN
+
+**Requirements:**
+- MongoDB Atlas (free tier available)
+- Environment variables configured
+- GitHub repository
+
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -255,7 +269,7 @@ This project is private and proprietary.
 
 ## 👤 Author
 
-Michael Parker (Mikey)
+Mikey
 
 ---
 

@@ -41,8 +41,8 @@ const RefundPolicy = () => {
             <h2 className="text-xl font-semibold text-white mb-2">3. How to Request a Refund</h2>
             <p>
               Email your request to{' '}
-              <a href="mailto:mikey@webdev.com" className="text-red-400 hover:text-red-300 underline">
-                mikey@webdev.com
+              <a href="mailto:mike@urmikexd.me" className="text-red-400 hover:text-red-300 underline">
+                mike@urmikexd.me
               </a>{' '}
               with:
             </p>

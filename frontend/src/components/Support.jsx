@@ -20,8 +20,8 @@ const Support = () => {
             <h2 className="text-xl font-semibold text-white mb-2">Contact</h2>
             <p className="text-gray-400">
               For any support queries, email me at{' '}
-              <a href="mailto:mikey@webdev.com" className="text-red-400 hover:text-red-300 underline">
-                mikey@webdev.com
+              <a href="mailto:mike@urmikexd.me" className="text-red-400 hover:text-red-300 underline">
+                mike@urmikexd.me
               </a>
               . I usually respond within 1–2 business days.
             </p>

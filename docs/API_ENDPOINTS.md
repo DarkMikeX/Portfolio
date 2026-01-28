@@ -35,12 +35,12 @@ http://127.0.0.1:8000/api
 ```json
 {
   "id": "...",
-  "name": "Michael Parker",
+  "name": "Mikey",
   "nickname": "Mikey",
   "title": "Full-Stack Developer",
   "tagline": "With great code comes great responsibility",
   "description": "...",
-  "email": "mikey@webdev.com",
+  "email": "mike@urmikexd.me",
   "phone": "+1 (555) 123-4567",
   "location": "New York City, NY",
   "avatar": "https://...",
