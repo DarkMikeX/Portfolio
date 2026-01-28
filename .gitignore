@@ -80,5 +80,8 @@ agenthub/agents/youtube/db
 # Build caches
 .cache/
 
+# Duplicate avatar files (should only be in public/)
+frontend/src/data/hero-avatar.png
+
 # Mobile development
 android-sdk/ 
