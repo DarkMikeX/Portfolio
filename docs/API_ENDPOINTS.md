@@ -35,8 +35,8 @@ http://127.0.0.1:8000/api
 ```json
 {
   "id": "...",
-  "name": "Mikey",
-  "nickname": "Mikey",
+  "name": "Gaurav",
+  "nickname": "Gaurav",
   "title": "Full-Stack Developer",
   "tagline": "With great code comes great responsibility",
   "description": "...",
@@ -137,7 +137,7 @@ http://127.0.0.1:8000/api
     "name": "Sarah Johnson",
     "role": "CEO, TechStart Inc.",
     "avatar": "https://...",
-    "content": "Mikey delivered an exceptional...",
+    "content": "Gaurav delivered an exceptional...",
     "rating": 5
   },
   ...

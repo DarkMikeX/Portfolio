@@ -29,8 +29,8 @@ async def update_personal_info(update: PersonalInfoUpdate):
         existing = await db.personal_info.find_one({}, {"_id": 0})
         if not existing:
             new_info = PersonalInfo(
-                name=update.name or "Mikey",
-                nickname=update.nickname or "Mikey",
+                name=update.name or "Gaurav",
+                nickname=update.nickname or "Gaurav",
                 title=update.title or "Full-Stack Developer",
                 tagline=update.tagline or "With great code comes great responsibility",
                 description=update.description or "A passionate developer...",
@@ -60,8 +60,8 @@ async def update_personal_info(update: PersonalInfoUpdate):
 def _get_default_personal_info():
     """Get default personal info"""
     return PersonalInfo(
-        name="Mikey",
-        nickname="Mikey",
+        name="Gaurav",
+        nickname="Gaurav",
         title="Full-Stack Developer",
         tagline="With great code comes great responsibility",
         description="A passionate developer swinging through the digital landscape, crafting exceptional web experiences with precision and creativity.",

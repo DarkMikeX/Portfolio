@@ -237,8 +237,8 @@ async def get_personal_info():
         if not info:
             # Return default if not found
             default_info = PersonalInfo(
-                name="Mikey",
-                nickname="Mikey",
+                name="Gaurav",
+                nickname="Gaurav",
                 title="Full-Stack Developer",
                 tagline="With great code comes great responsibility",
                 description="A passionate developer swinging through the digital landscape, crafting exceptional web experiences with precision and creativity.",
@@ -260,8 +260,8 @@ async def get_personal_info():
         logger.warning(f"MongoDB query failed: {e}. Returning default personal info.")
         # Return default on error
         return PersonalInfo(
-            name="Michael Parker",
-            nickname="Mikey",
+            name="Gaurav",
+            nickname="Gaurav",
             title="Full-Stack Developer",
             tagline="With great code comes great responsibility",
             description="A passionate developer swinging through the digital landscape, crafting exceptional web experiences with precision and creativity.",
@@ -285,8 +285,8 @@ async def update_personal_info(update: PersonalInfoUpdate):
         if not existing:
             # Create new if doesn't exist
             new_info = PersonalInfo(
-                name=update.name or "Mikey",
-                nickname=update.nickname or "Mikey",
+                name=update.name or "Gaurav",
+                nickname=update.nickname or "Gaurav",
                 title=update.title or "Full-Stack Developer",
                 tagline=update.tagline or "With great code comes great responsibility",
                 description=update.description or "A passionate developer...",

@@ -199,7 +199,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="py-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-gray-500 text-sm text-center sm:text-left">
-            © {currentYear} {personalInfo?.nickname || 'Mikey'}. All rights reserved. Made with{' '}
+            © {currentYear} {personalInfo?.nickname || 'Gaurav'}. All rights reserved. Made with{' '}
             <Heart className="inline w-4 h-4 text-red-500 fill-red-500" /> in NYC
           </p>
 

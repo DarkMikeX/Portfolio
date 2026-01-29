@@ -82,7 +82,7 @@ const Navbar = () => {
               className="font-display text-3xl font-bold text-white tracking-tight hover:text-red-500 transition-colors"
             >
               <span className="text-red-500">&lt;</span>
-              Mikey
+              Gaurav
               <span className="text-red-500">/&gt;</span>
             </a>
           </div>

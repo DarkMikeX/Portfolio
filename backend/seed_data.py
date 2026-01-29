@@ -12,8 +12,8 @@ import uuid
 
 # Mock data matching frontend/src/data/mock.js
 personal_info = {
-    "name": "Mikey",
-    "nickname": "Mikey",
+    "name": "Gaurav",
+    "nickname": "Gaurav",
     "title": "Full-Stack Developer",
     "tagline": "With great code comes great responsibility",
     "description": "A passionate developer swinging through the digital landscape, crafting exceptional web experiences with precision and creativity.",
@@ -165,28 +165,28 @@ testimonials = [
         "name": "Sarah Johnson",
         "role": "CEO, TechStart Inc.",
         "avatar": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
-        "content": "Mikey delivered an exceptional e-commerce platform that exceeded our expectations. His attention to detail and technical expertise are unmatched.",
+        "content": "Gaurav delivered an exceptional e-commerce platform that exceeded our expectations. His attention to detail and technical expertise are unmatched.",
         "rating": 5
     },
     {
         "name": "David Chen",
         "role": "Product Manager, InnovateCo",
         "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
-        "content": "Working with Mikey was a game-changer for our project. He brought creative solutions and delivered ahead of schedule.",
+        "content": "Working with Gaurav was a game-changer for our project. He brought creative solutions and delivered ahead of schedule.",
         "rating": 5
     },
     {
         "name": "Emily Rodriguez",
         "role": "Founder, DesignLab",
         "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
-        "content": "The UI/UX work Mikey did for our app transformed our user engagement. Highly recommend his services!",
+        "content": "The UI/UX work Gaurav did for our app transformed our user engagement. Highly recommend his services!",
         "rating": 5
     },
     {
         "name": "Marcus Thompson",
         "role": "CTO, DataFlow Systems",
         "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face",
-        "content": "Mikey's software engineering skills are top-notch. He built us a scalable solution that handles millions of requests.",
+        "content": "Gaurav's software engineering skills are top-notch. He built us a scalable solution that handles millions of requests.",
         "rating": 5
     }
 ]
@@ -198,6 +198,16 @@ skills = [
     {"name": "Python / FastAPI", "level": 85},
     {"name": "MongoDB / PostgreSQL", "level": 87},
     {"name": "UI/UX Design", "level": 82}
+]
+
+# Navigation links matching frontend defaults
+nav_links = [
+    {"label": "Home", "href": "#home", "order": 0},
+    {"label": "Services", "href": "#services", "order": 1},
+    {"label": "Portfolio", "href": "#portfolio", "order": 2},
+    {"label": "Products", "href": "#products", "order": 3},
+    {"label": "Testimonials", "href": "#testimonials", "order": 4},
+    {"label": "Contact", "href": "#contact", "order": 5},
 ]
 
 

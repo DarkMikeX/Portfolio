@@ -4,8 +4,8 @@ import { getBootstrap } from '../services/api';
 /** Show this immediately so all sections render content without waiting for the API. */
 const DEFAULT_BOOTSTRAP = {
   personalInfo: {
-    name: 'Mikey',
-    nickname: 'Mikey',
+    name: 'Gaurav',
+    nickname: 'Gaurav',
     title: 'Full-Stack Developer',
     tagline: 'With great code comes great responsibility',
     description: 'A passionate developer swinging through the digital landscape, crafting exceptional web experiences with precision and creativity.',
@@ -51,10 +51,10 @@ const DEFAULT_BOOTSTRAP = {
     { id: '4', title: 'API Integration Guide', description: 'Comprehensive e-book on building robust API integrations.', price: 19, originalPrice: 39, image: 'https://images.unsplash.com/photo-1532619187608-e5375cab36aa?w=400&h=300&fit=crop', category: 'E-Book', rating: 4.9, downloads: 4100 },
   ],
   testimonials: [
-    { id: '1', name: 'Sarah Johnson', role: 'CEO, TechStart Inc.', avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face', content: 'Mikey delivered an exceptional e-commerce platform that exceeded our expectations. His attention to detail and technical expertise are unmatched.', rating: 5 },
-    { id: '2', name: 'David Chen', role: 'Product Manager, InnovateCo', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face', content: 'Working with Mikey was a game-changer for our project. He brought creative solutions and delivered ahead of schedule.', rating: 5 },
-    { id: '3', name: 'Emily Rodriguez', role: 'Founder, DesignLab', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face', content: 'The UI/UX work Mikey did for our app transformed our user engagement. Highly recommend his services!', rating: 5 },
-    { id: '4', name: 'Marcus Thompson', role: 'CTO, DataFlow Systems', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face', content: "Mikey's software engineering skills are top-notch. He built us a scalable solution that handles millions of requests.", rating: 5 },
+    { id: '1', name: 'Sarah Johnson', role: 'CEO, TechStart Inc.', avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face', content: 'Gaurav delivered an exceptional e-commerce platform that exceeded our expectations. His attention to detail and technical expertise are unmatched.', rating: 5 },
+    { id: '2', name: 'David Chen', role: 'Product Manager, InnovateCo', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face', content: 'Working with Gaurav was a game-changer for our project. He brought creative solutions and delivered ahead of schedule.', rating: 5 },
+    { id: '3', name: 'Emily Rodriguez', role: 'Founder, DesignLab', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face', content: 'The UI/UX work Gaurav did for our app transformed our user engagement. Highly recommend his services!', rating: 5 },
+    { id: '4', name: 'Marcus Thompson', role: 'CTO, DataFlow Systems', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face', content: "Gaurav's software engineering skills are top-notch. He built us a scalable solution that handles millions of requests.", rating: 5 },
   ],
   skills: [
     { id: '1', name: 'React / Next.js', level: 95 },
@@ -87,8 +87,8 @@ export function BootstrapProvider({ children }) {
                 personalInfo: {
                   ...res.personalInfo,
                   avatar: '/hero-avatar.png',
-                  name: 'Mikey',
-                  nickname: 'Mikey',
+                  name: 'Gaurav',
+                  nickname: 'Gaurav',
                   email: 'mike@urmikexd.me',
                 },
               }
